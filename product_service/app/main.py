@@ -26,14 +26,14 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     yield
 
 app = FastAPI(lifespan = lifespan, title = "Product Service", 
-    version="0.0.1",
-    servers=[
+    version = "0.0.1",
+    servers = [
         {
             "url": "http://127.0.0.1:8004",
             "description": "Development Server"
         }
-        ]
-    )
+    ]
+)
 
 @app.get("/")
 def read_root():

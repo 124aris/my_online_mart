@@ -1,6 +1,10 @@
 .vscode
 
 inventory_service/.env
+inventory_service/app/__pycache__/
+inventory_service/app/consumers/__pycache__/
+inventory_service/app/crud/__pycache__/
+inventory_service/app/models/__pycache__/
 
 notification_service/.env
 
@@ -15,9 +19,3 @@ product_service/app/crud/__pycache__/
 product_service/app/models/__pycache__/
 
 user_service/.env
-
-microservice_02/
-
-todo/
-
-docker-compose.yaml

@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from sqlmodel import Session, select
-from app.models.inventory_model import InventoryItem
+from app.models.inventory_model import InventoryItem, InventoryItemUpdate
 
 def add_new_inventory_item(inventory_item_data: InventoryItem, session: Session):
     session.add(inventory_item_data)
@@ -15,23 +15,23 @@ def get_all_inventory_items(session: Session):
 def get_inventory_item_by_id(inventory_item_id: int, session: Session):
     inventory_item = session.exec(select(InventoryItem).where(InventoryItem.id == inventory_item_id)).one_or_none()
     if inventory_item is None:
-        raise HTTPException(status_code=404, detail="Inventory Item not found")
+        raise HTTPException(status_code=404, detail="Inventory Item Not Found")
     return inventory_item
 
 def delete_inventory_item_by_id(inventory_item_id: int, session: Session):
     inventory_item = session.exec(select(InventoryItem).where(InventoryItem.id == inventory_item_id)).one_or_none()
     if inventory_item is None:
-        raise HTTPException(status_code=404, detail="Inventory Item not found")
+        raise HTTPException(status_code=404, detail="Inventory Item Not Found")
     session.delete(inventory_item)
     session.commit()
     return {"message": "Inventory Item Deleted Successfully"}
 
-#def update_product_by_id(product_id: int, to_update_product_data: ProductUpdate, session: Session):
-#   product = session.exec(select(Product).where(Product.id == product_id)).one_or_none()
-#   if product is None:
-#       raise HTTPException(status_code=404, detail="Product not found")
-#   hero_data = to_update_product_data.model_dump(exclude_unset=True)
-#   product.sqlmodel_update(hero_data)
-#   session.add(product)
-#   session.commit()
-#   return product
+def update_inventory_item_by_id(inventory_item_id: int, to_update_item_data: InventoryItemUpdate, session: Session):
+    inventory_item = session.exec(select(InventoryItem).where(InventoryItem.id == inventory_item_id)).one_or_none()
+    if inventory_item is None:
+        raise HTTPException(status_code=404, detail="Inventory Item Not Found")
+    hero_data = to_update_item_data.model_dump(exclude_unset=True)
+    inventory_item.sqlmodel_update(hero_data)
+    session.add(inventory_item)
+    session.commit()
+    return inventory_item

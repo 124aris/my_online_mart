@@ -3,13 +3,12 @@ from typing import Annotated
 from sqlmodel import Session, SQLModel
 from fastapi import FastAPI, Depends, HTTPException
 from typing import AsyncGenerator
-from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
+from aiokafka import AIOKafkaProducer
 import asyncio
 import json
-from app import settings
 from app.db_engine import engine
-from app.models.inventory_model import InventoryItem
-from app.crud.inventory_crud import add_new_inventory_item, delete_inventory_item_by_id, get_all_inventory_items, get_inventory_item_by_id
+from app.models.inventory_model import InventoryItem, InventoryItemUpdate
+from app.crud.inventory_crud import delete_inventory_item_by_id, get_all_inventory_items, get_inventory_item_by_id, update_inventory_item_by_id
 from app.deps import get_session, get_kafka_producer
 from app.consumers.add_stock_consumer import consume_messages
 
@@ -67,11 +66,11 @@ def delete_single_inventory_item(item_id: int, session: Annotated[Session, Depen
     except Exception as e:
         raise HTTPException(status_code = 500, detail = str(e))
 
-# @app.patch("/manage-inventory/{item_id}", response_model=InventoryItem)
-# def update_single_inventory_item(item_id: int, item: InventoryItemUpdate, session: Annotated[Session, Depends(get_session)]):
-#     try:
-#         return update_inventory_item_by_id(item_id=item_id, to_update_item_data=item, session=session)
-#     except HTTPException as e:
-#         raise e
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=str(e))
+@app.patch("/manage-inventory/{item_id}", response_model = InventoryItem)
+def update_single_inventory_item(item_id: int, item: InventoryItemUpdate, session: Annotated[Session, Depends(get_session)]):
+    try:
+        return update_inventory_item_by_id(item_id, item, session)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code = 500, detail = str(e))

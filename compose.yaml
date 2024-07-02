@@ -3,50 +3,50 @@ version: '3.9'
 name: online_mart
 
 services:
-  inventory-service:
-    build:
-      context: ./inventory_service
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./inventory_service:/code
-    depends_on:
-        - postgres_db
-        - broker
-    ports:
-      - "8000:8000"
-  notification-service:
-    build:
-      context: ./notification_service
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./notification_service:/code
-    depends_on:
-        - postgres_db
-        - broker
-    ports:
-      - "8001:8000"
-  order-service:
-    build:
-      context: ./order_service
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./order_service:/code
-    depends_on:
-        - postgres_db
-        - broker
-    ports:
-      - "8002:8000"
-  payment-service:
-    build:
-      context: ./payment_service
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./payment_service:/code
-    depends_on:
-        - postgres_db
-        - broker
-    ports:
-      - "8003:8000"
+#  inventory-service:
+#    build:
+#      context: ./inventory_service
+#      dockerfile: Dockerfile.dev
+#    volumes:
+#      - ./inventory_service:/code
+#    depends_on:
+#        - postgres_inventory_db
+#        - broker
+#    ports:
+#      - "8000:8000"
+#  notification-service:
+#    build:
+#      context: ./notification_service
+#      dockerfile: Dockerfile.dev
+#    volumes:
+#      - ./notification_service:/code
+#    depends_on:
+#        - postgres_db
+#        - broker
+#    ports:
+#      - "8001:8000"
+#  order-service:
+#    build:
+#      context: ./order_service
+#      dockerfile: Dockerfile.dev
+#    volumes:
+#      - ./order_service:/code
+#    depends_on:
+#        - postgres_db
+#        - broker
+#    ports:
+#      - "8002:8000"
+#  payment-service:
+#    build:
+#      context: ./payment_service
+#      dockerfile: Dockerfile.dev
+#    volumes:
+#      - ./payment_service:/code
+#    depends_on:
+#        - postgres_db
+#        - broker
+#    ports:
+#      - "8003:8000"
   product-service:
     build:
       context: ./product_service
@@ -58,29 +58,29 @@ services:
         - broker
     ports:
       - "8004:8000"
-  user-service:
-    build:
-      context: ./user_service
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./user_service:/code
-    depends_on:
-        - postgres_db
-        - broker
-    ports:
-      - "8005:8000"
-  postgres_db:
-    image: postgres:latest
-    restart: always
-    container_name: PostgresContainer
-    environment:
-        - POSTGRES_USER=muhammadharis
-        - POSTGRES_PASSWORD=my_password
-        - POSTGRES_DB=onlinemartdatabase
-    ports:
-        - '5432:5432'
-    volumes:
-        - postgres_db:/var/lib/postgresql/data
+#  user-service:
+#    build:
+#      context: ./user_service
+#      dockerfile: Dockerfile.dev
+#    volumes:
+#      - ./user_service:/code
+#    depends_on:
+#        - postgres_db
+#        - broker
+#    ports:
+#      - "8005:8000"
+#  postgres_db:
+#    image: postgres:latest
+#    restart: always
+#    container_name: PostgresContainer
+#    environment:
+#        - POSTGRES_USER=muhammadharis
+#        - POSTGRES_PASSWORD=my_password
+#        - POSTGRES_DB=onlinemartdatabase
+#    ports:
+#        - '5432:5432'
+#    volumes:
+#        - postgres_db:/var/lib/postgresql/data
   postgres_product_db:
     image: postgres:latest
     restart: always
@@ -93,6 +93,18 @@ services:
         - '5433:5432'
     volumes:
         - postgres_product_db:/var/lib/postgresql/data
+#  postgres_inventory_db:
+#    image: postgres:latest
+#    restart: always
+#    container_name: PostgresInventoryCont
+#    environment:
+#      - POSTGRES_USER=ziakhan
+#      - POSTGRES_PASSWORD=my_password
+#      - POSTGRES_DB=mydatabase
+#    ports:
+#      - "5482:5432"
+#    volumes:
+#      - postgres_inventory_db:/var/lib/postgresql/data
   broker:
     image: apache/kafka:3.7.0
     hostname: broker
@@ -127,10 +139,12 @@ services:
       - broker
 
 volumes:
-  postgres_db:
-    driver: local
+#  postgres_db:
+#    driver: local
   postgres_product_db:
     driver: local
+#  postgres_inventory_db:
+#    driver: local
 
 networks:
   default:

@@ -11,19 +11,19 @@ class Product(SQLModel, table = True):
     weight: Optional[float] = None
     category: str
     sku: Optional[str] = None
-    rating: list["ProductRating"] = Relationship(back_populates = 'product')
+    # rating: list["ProductRating"] = Relationship(back_populates = 'product')
     # image: str
     # quantity: Optional[int] = None
     # color: Optional[str] = None
     # rating: Optional[float] = None
 
-class ProductRating(SQLModel, table = True):
-    id: Optional[int] = Field(default = None, primary_key = True)
-    product_id: int = Field(foreign_key = "product.id")
-    rating: int
-    review: Optional[str] = None
-    product = Relationship(back_populates = 'rating')
-    # user_id: int
+#class ProductRating(SQLModel, table = True):
+#    id: Optional[int] = Field(default = None, primary_key = True)
+#    product_id: int = Field(foreign_key = "product.id")
+#    rating: int
+#    review: Optional[str] = None
+#    product = Relationship(back_populates = 'rating')
+#     user_id: int
 
 class ProductUpdate(SQLModel):
     name: Optional[str] = None

@@ -9,6 +9,10 @@ order_service/.env
 payment_service/.env
 
 product_service/.env
+product_service/app/__pycache__/
+product_service/app/consumers/__pycache__/
+product_service/app/crud/__pycache__/
+product_service/app/models/__pycache__/
 
 user_service/.env
 

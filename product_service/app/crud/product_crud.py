@@ -35,3 +35,7 @@ def update_product_by_id(product_id: int, to_update_product_data: ProductUpdate,
     session.add(product)
     session.commit()
     return product
+
+def validate_product_by_id(product_id: int, session: Session) -> Product | None:
+    product = session.exec(select(Product).where(Product.id == product_id)).one_or_none()
+    return product

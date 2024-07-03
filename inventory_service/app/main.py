@@ -38,7 +38,6 @@ def read_root():
 
 @app.post("/manage-inventory/", response_model = InventoryItem)
 async def create_new_inventory_item(item: InventoryItem, session: Annotated[Session, Depends(get_session)], producer: Annotated[AIOKafkaProducer, Depends(get_kafka_producer)]):
-
     item_dict = {field: getattr(item, field) for field in item.dict()}
     item_json = json.dumps(item_dict).encode("utf-8")
     await producer.send_and_wait("AddStock", item_json)
@@ -51,7 +50,7 @@ def all_inventory_items(session: Annotated[Session, Depends(get_session)]):
 @app.get("/manage-inventory/{item_id}", response_model = InventoryItem)
 def single_inventory_item(item_id: int, session: Annotated[Session, Depends(get_session)]):
     try:
-        return get_inventory_item_by_id(inventory_item_id = item_id, session = session)
+        return get_inventory_item_by_id(item_id, session)
     except HTTPException as e:
         raise e
     except Exception as e:
@@ -60,7 +59,7 @@ def single_inventory_item(item_id: int, session: Annotated[Session, Depends(get_
 @app.delete("/manage-inventory/{item_id}", response_model = dict)
 def delete_single_inventory_item(item_id: int, session: Annotated[Session, Depends(get_session)]):
     try:
-        return delete_inventory_item_by_id(inventory_item_id = item_id, session = session)
+        return delete_inventory_item_by_id(item_id, session)
     except HTTPException as e:
         raise e
     except Exception as e:

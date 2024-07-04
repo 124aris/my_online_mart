@@ -7,10 +7,22 @@ inventory_service/app/crud/__pycache__/
 inventory_service/app/models/__pycache__/
 
 notification_service/.env
+notification_service/app/__pycache__/
+notification_service/app/consumers/__pycache__/
+notification_service/app/crud/__pycache__/
+inventory_service/app/models/__pycache__/
 
 order_service/.env
+order_service/app/__pycache__/
+order_service/app/consumers/__pycache__/
+order_service/app/crud/__pycache__/
+order_service/app/models/__pycache__/
 
 payment_service/.env
+payment_service/app/__pycache__/
+payment_service/app/consumers/__pycache__/
+payment_service/app/crud/__pycache__/
+payment_service/app/models/__pycache__/
 
 product_service/.env
 product_service/app/__pycache__/
@@ -19,3 +31,7 @@ product_service/app/crud/__pycache__/
 product_service/app/models/__pycache__/
 
 user_service/.env
+user_service/app/__pycache__/
+user_service/app/consumers/__pycache__/
+user_service/app/crud/__pycache__/
+user_service/app/models/__pycache__/

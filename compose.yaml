@@ -32,7 +32,7 @@ services:
     volumes:
       - ./order_service:/code
     depends_on:
-#        - postgres_db
+        - postgres_order_db
         - broker
     ports:
       - "8002:8000"
@@ -43,7 +43,7 @@ services:
     volumes:
       - ./payment_service:/code
     depends_on:
-#        - postgres_db
+        - postgres_payment_db
         - broker
     ports:
       - "8003:8000"
@@ -69,18 +69,6 @@ services:
         - broker
     ports:
       - "8005:8000"
-#  postgres_db:
-#    image: postgres:latest
-#    restart: always
-#    container_name: PostgresContainer
-#    environment:
-#        - POSTGRES_USER=muhammadharis
-#        - POSTGRES_PASSWORD=my_password
-#        - POSTGRES_DB=onlinemartdatabase
-#    ports:
-#        - '5432:5432'
-#    volumes:
-#        - postgres_db:/var/lib/postgresql/data
   postgres_product_db:
     image: postgres:latest
     restart: always
@@ -129,6 +117,18 @@ services:
       - "5489:5432"
     volumes:
       - postgres_order_db:/var/lib/postgresql/data
+  postgres_payment_db:
+    image: postgres:latest
+    restart: always
+    container_name: PostgresPaymentContainer
+    environment:
+      - POSTGRES_USER=muhammadharis
+      - POSTGRES_PASSWORD=my_password
+      - POSTGRES_DB=onlinemartdatabase
+    ports:
+      - "5490:5432"
+    volumes:
+      - postgres_payment_db:/var/lib/postgresql/data
   broker:
     image: apache/kafka:3.7.0
     hostname: broker
@@ -163,8 +163,6 @@ services:
       - broker
 
 volumes:
-#  postgres_db:
-#    driver: local
   postgres_product_db:
     driver: local
   postgres_inventory_db:
@@ -172,6 +170,8 @@ volumes:
   postgres_user_db:
     driver: local
   postgres_order_db:
+    driver: local
+  postgres_payment_db:
     driver: local
 
 networks:

@@ -9,8 +9,7 @@ class User(SQLModel, table = True):
     password: str
     phone_number: int = Field(max_digits = 11)
 
-class UserUpdate():
-    id: Optional[int] = None
+class UserUpdate(SQLModel):
     name: Optional[str] = None
     email: Optional[EmailStr] = None
     password: Optional[str] = None

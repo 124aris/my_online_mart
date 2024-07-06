@@ -9,7 +9,6 @@ class InventoryItem(SQLModel, table = True):
     status: str 
 
 class InventoryItemUpdate(SQLModel):
-    id: Optional[int] = None
     product_id: Optional[int] = None
     variant_id: Optional[int] = None
     quantity: Optional[int] = None

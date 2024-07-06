@@ -117,6 +117,18 @@ services:
       - "5485:5432"
     volumes:
       - postgres_user_db:/var/lib/postgresql/data
+  postgres_order_db:
+    image: postgres:latest
+    restart: always
+    container_name: PostgresOrderContainer
+    environment:
+      - POSTGRES_USER=muhammadharis
+      - POSTGRES_PASSWORD=my_password
+      - POSTGRES_DB=onlinemartdatabase
+    ports:
+      - "5489:5432"
+    volumes:
+      - postgres_order_db:/var/lib/postgresql/data
   broker:
     image: apache/kafka:3.7.0
     hostname: broker
@@ -158,6 +170,8 @@ volumes:
   postgres_inventory_db:
     driver: local
   postgres_user_db:
+    driver: local
+  postgres_order_db:
     driver: local
 
 networks:

@@ -2,21 +2,21 @@ from typing import Optional
 from sqlmodel import Relationship, SQLModel, Field
 
 class RemainingPayment(SQLModel):
-    order_id: int = Field(foreign_key = "order.order_id")
+    #order_id: int = Field(foreign_key = "order.order_id")
     total_price: int
     payment_method: Optional[str]
     payment_method_id: str
     remaining_balance: float
 
 class PaymentForm(SQLModel):
-    order_id: int = Field(foreign_key = "order.order_id")
+    #order_id: int = Field(foreign_key = "order.order_id")
     total_price: int
     payment_method: Optional[str]
     payment_method_id: Optional[str]
     advance_payment: Optional["AdvancePayment"]
 
 class Payment(SQLModel, table = True):
-    order_id: int = Field(foreign_key = "order.order_id")
+    #order_id: int = Field(foreign_key = "order.order_id")
     total_price: int
     payment_method: Optional[str]
     payment_id: int = Field(primary_key = True)

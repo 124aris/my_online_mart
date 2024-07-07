@@ -12,7 +12,7 @@ def add_new_user(user_data: User, session: Session):
     return user_data
 
 def get_all_users(session: Session):
-    all_users = session.exec(select(User)).all()
+    all_users = session.exec(select(User.id, User.name, User.email)).all()
     return all_users
 
 def get_user_by_id(user_id: int, session: Session):

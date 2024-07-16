@@ -1,7 +1,7 @@
 from fastapi_mail import ConnectionConfig
 from app import settings
 
-conf = ConnectionConfig(
+configuration = ConnectionConfig(
     MAIL_USERNAME = str(settings.MAIL_USERNAME),
     MAIL_PASSWORD = str(settings.MAIL_PASSWORD),
     MAIL_FROM = str(settings.MAIL_FROM),

@@ -18,7 +18,7 @@ def create_db_and_tables() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    task = asyncio.create_task(consume_messages(settings.KAFKA_PAYMENT_TOPIC, 'broker:19092'))
+    task = asyncio.create_task(consume_messages(settings.KAFKA_PAYMENT_TOPIC, settings.BOOTSTRAP_SERVER))
     create_db_and_tables()
     yield
 
@@ -37,7 +37,7 @@ def read_root():
     return {"Hello": "Payment Service"}
 
 @app.post("/manage-payments/", response_model = Payment)
-async def create_new_payment(payment: Payment, session: Annotated[Session, Depends(get_session)], producer: Annotated[AIOKafkaProducer, Depends(get_kafka_producer)]):
+async def create_new_payment(payment: Payment, producer: Annotated[AIOKafkaProducer, Depends(get_kafka_producer)]):
     payment_dict = {field: getattr(payment, field) for field in payment.dict()}
     payment_json = json.dumps(payment_dict).encode("utf-8")
     await producer.send_and_wait(settings.KAFKA_PAYMENT_TOPIC, payment_json)

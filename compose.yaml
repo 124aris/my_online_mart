@@ -21,7 +21,6 @@ services:
     volumes:
       - ./notification_service:/code
     depends_on:
-#        - postgres_db
         - broker
     ports:
       - "8001:8000"

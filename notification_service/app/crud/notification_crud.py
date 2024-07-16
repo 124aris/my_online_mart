@@ -1,6 +1,6 @@
 from app.models.notification_model import Email
 from fastapi_mail import MessageSchema, MessageType, FastMail
-from app.mail_config import conf
+from app.mail_config import configuration
 
 def create_custom_message(message: str):
     custom_message = f"""
@@ -21,6 +21,6 @@ async def send_custom_message(email: Email, emailsubject: str, emailmessage: str
         body = custom_message,
         subtype = MessageType.html
     )
-    fm = FastMail(conf)
+    fm = FastMail(configuration)
     await fm.send_message(message)
     return {"Message": f"{emailsubject} Email Has Been Sent"}

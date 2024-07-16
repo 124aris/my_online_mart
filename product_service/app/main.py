@@ -20,8 +20,8 @@ def create_db_and_tables() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    task = asyncio.create_task(consume_messages(settings.KAFKA_PRODUCT_TOPIC, 'broker:19092'))
-    asyncio.create_task(consume_inventory_messages("AddStock", 'broker:19092'))
+    task = asyncio.create_task(consume_messages(settings.KAFKA_PRODUCT_TOPIC, settings.BOOTSTRAP_SERVER))
+    asyncio.create_task(consume_inventory_messages(settings.KAFKA_INVENTORY_TOPIC, settings.BOOTSTRAP_SERVER))
     create_db_and_tables()
     yield
 
@@ -40,7 +40,7 @@ def read_root():
     return {"Hello": "Product Service"}
 
 @app.post("/manage-products/", response_model = Product)
-async def create_new_product(product: Product, session: Annotated[Session, Depends(get_session)], producer: Annotated[AIOKafkaProducer, Depends(get_kafka_producer)]):
+async def create_new_product(product: Product, producer: Annotated[AIOKafkaProducer, Depends(get_kafka_producer)]):
     product_dict = {field: getattr(product, field) for field in product.dict()}
     product_json = json.dumps(product_dict).encode("utf-8")
     await producer.send_and_wait(settings.KAFKA_PRODUCT_TOPIC, product_json)

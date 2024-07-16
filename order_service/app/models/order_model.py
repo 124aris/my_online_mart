@@ -18,7 +18,7 @@ class Order(SQLModel, table=True):
 
 class OrderItem(SQLModel, table=True):
     order_item_id: Optional[int] = Field(default = None, primary_key = True)
-    #order_id: int = Field(foreign_key = "order.order_id")
+    order_id: int
     product_id: int
     product_item_id: int
     product_size_id: int

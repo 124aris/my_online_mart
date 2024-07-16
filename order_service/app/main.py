@@ -18,7 +18,7 @@ def create_db_and_tables() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    task = asyncio.create_task(consume_messages(settings.KAFKA_ORDER_TOPIC, 'broker:19092'))
+    task = asyncio.create_task(consume_messages(settings.KAFKA_ORDER_TOPIC, settings.BOOTSTRAP_SERVER))
     create_db_and_tables()
     yield
 
@@ -37,7 +37,7 @@ def read_root():
     return {"Hello": "Order Service"}
 
 @app.post("/manage-orders/", response_model = Order)
-async def create_new_order(order: Order, session: Annotated[Session, Depends(get_session)], producer: Annotated[AIOKafkaProducer, Depends(get_kafka_producer)]):
+async def create_new_order(order: Order, producer: Annotated[AIOKafkaProducer, Depends(get_kafka_producer)]):
     order_dict = {field: getattr(order, field) for field in order.dict()}
     order_json = json.dumps(order_dict).encode("utf-8")
     await producer.send_and_wait(settings.KAFKA_ORDER_TOPIC, order_json)

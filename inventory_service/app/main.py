@@ -6,11 +6,12 @@ from typing import AsyncGenerator
 from aiokafka import AIOKafkaProducer
 import asyncio
 import json
+from app import settings
 from app.db_engine import engine
 from app.models.inventory_model import InventoryItem, InventoryItemUpdate
 from app.crud.inventory_crud import delete_inventory_item_by_id, get_all_inventory_items, get_inventory_item_by_id, update_inventory_item_by_id
 from app.deps import get_session, get_kafka_producer
-from app.consumers.add_stock_consumer import consume_messages
+from inventory_service.app.consumers.inventory_consumer import consume_messages
 
 
 def create_db_and_tables() -> None:
@@ -18,7 +19,7 @@ def create_db_and_tables() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    task = asyncio.create_task(consume_messages("inventory-add-stock-response", 'broker:19092'))
+    task = asyncio.create_task(consume_messages(settings.KAFKA_INVENTORY_RESPONSE_TOPIC, settings.BOOTSTRAP_SERVER))
     create_db_and_tables()
     yield
 
@@ -37,10 +38,10 @@ def read_root():
     return {"Hello": "Inventory Service"}
 
 @app.post("/manage-inventory/", response_model = InventoryItem)
-async def create_new_inventory_item(item: InventoryItem, session: Annotated[Session, Depends(get_session)], producer: Annotated[AIOKafkaProducer, Depends(get_kafka_producer)]):
+async def create_new_inventory_item(item: InventoryItem, producer: Annotated[AIOKafkaProducer, Depends(get_kafka_producer)]):
     item_dict = {field: getattr(item, field) for field in item.dict()}
     item_json = json.dumps(item_dict).encode("utf-8")
-    await producer.send_and_wait("AddStock", item_json)
+    await producer.send_and_wait(settings.KAFKA_INVENTORY_TOPIC, item_json)
     return item
 
 @app.get("/manage-inventory/all", response_model = list[InventoryItem])

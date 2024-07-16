@@ -21,7 +21,7 @@ def create_db_and_tables() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    task = asyncio.create_task(consume_messages(settings.KAFKA_USER_TOPIC, 'broker:19092'))
+    task = asyncio.create_task(consume_messages(settings.KAFKA_USER_TOPIC, settings.BOOTSTRAP_SERVER))
     create_db_and_tables()
     yield
 
@@ -73,7 +73,7 @@ def read_users_me(token: Annotated[str, Depends(oauth2_scheme)]):
     return user_in_db
 
 @app.post("/manage-users/", response_model = User)
-async def create_new_user(user: User, session: Annotated[Session, Depends(get_session)], producer: Annotated[AIOKafkaProducer, Depends(get_kafka_producer)]):
+async def create_new_user(user: User, producer: Annotated[AIOKafkaProducer, Depends(get_kafka_producer)]):
     user_dict = {field: getattr(user, field) for field in user.dict()}
     user_json = json.dumps(user_dict).encode("utf-8")
     await producer.send_and_wait(settings.KAFKA_USER_TOPIC, user_json)

@@ -8,6 +8,7 @@ class User(SQLModel, table = True):
     email: str
     password: str
     phone_number: int
+    
 class UserUpdate(SQLModel):
     name: Optional[str] = None
     email: Optional[str] = None

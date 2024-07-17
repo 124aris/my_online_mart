@@ -11,15 +11,14 @@ from app.db_engine import engine
 from app.models.inventory_model import InventoryItem, InventoryItemUpdate
 from app.crud.inventory_crud import delete_inventory_item_by_id, get_all_inventory_items, get_inventory_item_by_id, update_inventory_item_by_id
 from app.deps import get_session, get_kafka_producer
-from inventory_service.app.consumers.inventory_consumer import consume_messages
-
+from app.consumers.inventory_consumer import consume_messages
 
 def create_db_and_tables() -> None:
     SQLModel.metadata.create_all(engine)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    task = asyncio.create_task(consume_messages(settings.KAFKA_INVENTORY_RESPONSE_TOPIC, settings.BOOTSTRAP_SERVER))
+    task = asyncio.create_task(consume_messages(settings.KAFKA_INVENTORY_TOPIC, settings.BOOTSTRAP_SERVER))
     create_db_and_tables()
     yield
 

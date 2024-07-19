@@ -29,6 +29,7 @@ sentry-sdk = {extras = ["fastapi"], version = "^1.42.0"}
 aiokafka = "^0.10.0"
 python-dotenv = "^1.0.1"
 stripe = "^10.2.0"
+protobuf = "^5.27.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
